@@ -61,6 +61,13 @@ def JSONtablePrint(JSONfile):
 
     print("\nDone")
 
+
+
+######################################################################################
+#   getRecipe(): prints an inputted recipe in the form of a url from allrecipes.com in
+#                in a human-readable format
+######################################################################################    
+
 def getRecipe(url):
     content = urllib2.urlopen(url).read()
     soup = BeautifulSoup(content)
@@ -118,6 +125,12 @@ def getRecipe(url):
 
 
 
+######################################################################################
+#   getDirections(): returns the directions of an inputted recipe in the form of a url from allrecipes.com
+#                    
+#
+###################################################################################### 
+
 def getDirections(url):
     content = urllib2.urlopen(url).read()
     soup = BeautifulSoup(content)
@@ -128,12 +141,25 @@ def getDirections(url):
     return directions
 
 
+######################################################################################
+#   getServingSize(): returns the serving size of an inputted recipe in the form of a url from allrecipes.com
+#                    
+#
+###################################################################################### 
+
+
 def getServingSize(url):
     content = urllib2.urlopen(url).read()
     soup = BeautifulSoup(content)
     serving = soup.find('span', attrs={'itemprop':'recipeYield'}).decode_contents(formatter="html")
     return serving
 
+
+######################################################################################
+#   getTime(): returns the total prep + cook time of an inputted recipe in the form of a url from allrecipes.com
+#                    
+#
+###################################################################################### 
 
 def getTime(url):
     content = urllib2.urlopen(url).read()
@@ -144,6 +170,12 @@ def getTime(url):
     count += int(prep[0:prep.index("H")])*60 + int(prep[prep.index("H")+1:prep.index("M")])
     return count
 
+
+######################################################################################
+#   getNutritionalData(): returns nutrition facts including sodium, fat, and calories of an inputted ingredient 
+#                         making use of the nutritionix api
+#
+###################################################################################### 
 
 def getNutritionalData(ingredient):
     returnList = []
@@ -169,6 +201,12 @@ def getNutritionalData(ingredient):
         return []
 
 
+######################################################################################
+#   getFatRatio(): returns the fat per calorie ratio of an inputted ingredient 
+#                    
+#
+###################################################################################### 
+
 def getFatRatio(ingredient):
     data = getNutritionalData(ingredient)
     try:
@@ -184,6 +222,12 @@ def getFatRatio(ingredient):
         return 0
 
 
+######################################################################################
+#   getSodiumRatio(): returns the sodium per calorie ratio of an inputted ingredient 
+#                    
+#
+###################################################################################### 
+
 def getSodiumRatio(ingredient):
     data = getNutritionalData(ingredient)
     try:
@@ -197,6 +241,12 @@ def getSodiumRatio(ingredient):
     except ZeroDivisionError:
         return 9999
 
+######################################################################################
+#   getRelatedRecipes(): recursively crawls through source code of an inputted allrecipes.com recipe 
+#                        to print an arbitrary amount of related recipe urls
+#
+###################################################################################### 
+
 def getRelatedRecipes(url):
     if (len(urls) < 1000):
         content = urllib2.urlopen(url).read()
@@ -209,6 +259,13 @@ def getRelatedRecipes(url):
                 urls.append(link)
                 print(link)
                 getRelatedRecipes(link)
+
+
+######################################################################################
+#   getCat(): uses the first paragraph of a wikipedia article to determine if the input ingredient
+#             is a meat, vegetable, fruit, dairy, starch, spice, bean, sauce, or fish
+#             by counting the occurrances
+###################################################################################### 
 
 def getCat(ingredient):
     url = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts|info&exintro&titles="+ ingredient.replace(" ","%20")+"&format=json&explaintext&redirects&inprop=url&indexpageids"
@@ -247,97 +304,199 @@ def getCat(ingredient):
         return 'Unparsed'
     return categories[results.index(maxR)]
 
+######################################################################################
+#   transformVeg(): made use of the preparation words preceding meats to determine which 
+#                   vegetarian ingredients to which a meat could be transformed
+#
+###################################################################################### 
+
 def transformVeg(data):
+    transformedIngreds=[]
     returnData = copy.deepcopy(data)
     for i in range(len(data['ingredients'])):
+        ingredTuple=[]
         name = (data['ingredients'][i]['name'][0])
         print(name)
         prepList = data['ingredients'][i]['preparation']
         if (getCat(name) == 'Meat'):
             if ('ground' in prepList or 'ground' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('tofu')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['tofu']
                 if ('ground' in prepList):
                     returnData['ingredients'][i]['preparation'][prepList.index('ground')] = ['crumbled']
                 else:
                     prepList.append('crumbled')
             elif ('sliced' in prepList):
+                ingredTuple.append(name)
+                ingredTuple.append('tofurkey')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['tofurkey']
             elif ('chopped' in prepList or 'shredded' in prepList or 'cubed' in prepList or 'cube' in prepList):
+                ingredTuple.append(name)
+                ingredTuple.append('tofu')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['tofu']
             else:
+                ingredTuple.append(name)
+                ingredTuple.append('veggie burger')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['veggie burger']
         elif (getCat(name) == 'Fish'):
+                ingredTuple.append(name)
+                ingredTuple.append('veggie burger')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['veggie burger']
 
-    return(returnData)
 
+    return(transformDirections(returnData,transformIngreds,0))
+
+
+
+######################################################################################
+#   transformFromVeg(): logical reversed function of tranformVeg
+#
+###################################################################################### 
 
 def transformFromVeg(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
     for i in range(len(data['ingredients'])):
+        ingredTuple=[]
         name = (data['ingredients'][i]['name'][0])
         print(name)
         prepList = data['ingredients'][i]['preparation']
         if ('tofu' in name and 'crumbled' in prepList):
+                ingredTuple.append(name)
+                ingredTuple.append('chicken')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = 'chicken'
                 returnData['ingredients'][i]['preparation'][prepList.index('crumbled')] = ['ground']
         elif ('chopped' in prepList or 'shredded' in prepList or 'cubed' in prepList or 'cube' in prepList and 'tofu' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('pork')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['pork']
         else:
             returnData['ingredients'].append({'name':['chicken'],'quantity':[8],'measurement':['ounces'],'descriptor':[],'preparation':[],'prep-description':[]})
-    return(returnData)
+            ingredTuple.append(name)
+            ingredTuple.append('chicken')
+            transformedIngreds.append(ingredTuple)
+
+    return(transformDirections(returnData,transformIngreds,0))
+
+
+######################################################################################
+#   transformDairy(): created substitution tables for ingredients containing greater than
+#                     5 percent lactose
+###################################################################################### 
 
 def transformDairy(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
+    # learned that hard cheeses are effectively lactose free
     cheeses = ['Asiago', 'Carmody', 'Cheddar', 'Colby', 'Cotija', 'Edam', 'Enchilado', 'Fontina', 'Gouda', 'Havarti', 'Longhorn', 'Port Salut' , 'St. George', 'Syrian']
     for i in range(len(data['ingredients'])):
+        ingredTuple=[]
         name = (data['ingredients'][i]['name'][0])
         print(name)
         prepList = data['ingredients'][i]['preparation']
         if (getCat(name) == 'Dairy'):
             if ('cheese' in name):
+                ingredTuple.append(name)
+                ingredTuple.append(cheeses[randint(0,len(cheeses)-1)])
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = [cheeses[randint(0,len(cheeses)-1)]]
             if ('milk' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('soy milk')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['soy milk']
             if ('cream' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('soy cream')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['soy cream']
             if ('half' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('soy cream')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['soy cream']
             if ('yogurt' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('greek yogurt')
+                transformedIngreds.append(ingredTuple)
+                #greek yogurt effectively lactose-free
                 returnData['ingredients'][i]['name'] = ['greek yogurt']
             if ('butter' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('margarine')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['margarine']
             if ('ice cream' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('soy ice cream')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['soy ice cream']
                 
-    return(returnData)
+    return(transformDirections(returnData,transformIngreds,0))
+
+
+######################################################################################
+#   transformFromDairy(): logical reversed function of transformDairy
+#
+###################################################################################### 
 
 def tranformFromDairy(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
     cheeses = ['Asiago', 'Carmody', 'Cheddar', 'Colby', 'Cotija', 'Edam', 'Enchilado', 'Fontina', 'Gouda', 'Havarti', 'Longhorn', 'Port Salut' , 'St. George', 'Syrian']
     for i in range(len(data['ingredients'])):
+        ingredTuple=[]
         name = (data['ingredients'][i]['name'][0])
         print(name)
         prepList = data['ingredients'][i]['preparation']
         if (getCat(name) == 'Dairy'):
             if ('soy milk' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('milk')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['milk']
             if ('soy cream' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('cream')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['cream']
             if ('greek yogurt' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('yogurt')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['yogurt']
             if ('margarine' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('butter')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['butter']
             if ('soy ice cream' in name):
+                ingredTuple.append(name)
+                ingredTuple.append('ice cream')
+                transformedIngreds.append(ingredTuple)
                 returnData['ingredients'][i]['name'] = ['ice cream']
                 
-    return(returnData)
+    return(transformDirections(returnData,transformIngreds,0))
 
+######################################################################################
+#   transformKid(): using a list of accpeted kid-friendly vegetables, meats, and spices, 
+#                   returns a kid-friendly recipe 
+###################################################################################### 
 
 def transformKid(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
     vegList = ['tomatoes', 'onion', 'carrots', 'peas', 'corn', 'lettuce']
     for i in range(len(data['ingredients'])):
+        ingredTuple=[]
         name = (data['ingredients'][i]['name'][0])
         print(name)
         prepList = data['ingredients'][i]['preparation']
@@ -349,11 +508,17 @@ def transformKid(data):
             returnData['ingredients'][i]['name'] = ['chicken breast']
             returnData['ingredients'][i]['preparation'] = []
 
-    return(returnData)
+    return(transformDirections(returnData,transformIngreds,0))
 
+
+######################################################################################
+#   transformPizza(): isolates meats, vegetables, and spices, and makes use of a typical
+#                     pizza recipe to transform any recipe into a pizza
+###################################################################################### 
 
 def transformPizza(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
 
     deleteIndices = []
     for i in range(len(data['ingredients'])):
@@ -379,10 +544,18 @@ def transformPizza(data):
     returnData['ingredients'].append({'name':['black pepper'],'quantity':['1'],'measurement':['teaspoon'],'descriptor':['to taste'],'preparation':[],'prep-description':[]})
     returnData['ingredients'].append({'name':['mozzarella cheese'],'quantity':['8'],'measurement':['ounces'],'descriptor':[''],'preparation':[],'prep-description':[]})
 
-    return(returnData)
+
+    return(transformDirections(returnData,transformIngreds,1))
+
+######################################################################################
+#   transformLowFat(): used knowledge of ingredient fat ratio to decrease the amount of an ingredient with high fat ratio
+#
+###################################################################################### 
+
 
 def transformLowFat(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
     ratioList = {}
     for i in range(len(data['ingredients'])):
         if (getFatRatio(data['ingredients'][i]['name'][0]) > .06):
@@ -392,11 +565,20 @@ def transformLowFat(data):
     for key,value in ratioList.iteritems():
         print(key, " ", value)
     
-    return(returnData)
+    return(transformDirections(returnData,transformIngreds,0))
+
+
+
+######################################################################################
+#   transformLowSalt(): used knowledge of ingredient sodium ratio to decrease the amount of an ingredient with high sodium ratio
+#
+###################################################################################### 
+
 
 
 def transformLowSalt(data):
     returnData = copy.deepcopy(data)
+    transformedIngreds=[]
     ratioList = {}
     for i in range(len(data['ingredients'])):
         if (getSodiumRatio(data['ingredients'][i]['name'][0]) > 3.5):
@@ -405,8 +587,61 @@ def transformLowSalt(data):
 
     for key,value in ratioList.iteritems():
         print(key, " ", value)
-    
-    return(returnData)
+
+    return(transformDirections(returnData,transformIngreds,0))
+
+
+
+
+######################################################################################
+#   transformDirections(): used tuples of original ingredients and their respective transformed
+#                       ingredients to replace the occurrances of an original ingredient.
+#                       Special case: pizza.
+###################################################################################### 
+
+def transformDirections(data, transformedIngreds, isPizza):
+    returnData = copy.deepcopy(data)        
+    directions = returnData['directions']
+    originalIngredients = []
+    transformedIngredients = []
+    tupleList = transformedIngreds
+    for ing in returnData['ingredients']:
+        originalIngredients.append(ing['name'][0])
+        
+    for ing in transformationJson['ingredients']:
+        transformedIngredients.append(ing['name'][0])
+        
+
+    if (isPizza):
+        returnDirections = []
+        for sentence in directions:
+            hasPizzaIngredient = False
+            for ing in transformedIngredients:
+                if ing in transformedIngredients:
+                    hasPizzaIngredient = True
+            if (hasPizzaIngredient == True):
+                returnDirections.append(sentence)
+        returnDirections.append(nltk.sent_tokenize('Combine the bread flour, sugar, yeast and kosher salt in the bowl of a stand mixer and combine.' +
+                                'While the mixer is running, add the water and 2 tablespoons of the oil and beat until the dough forms into a ball.'+
+                                'If the dough is sticky, add additional flour, 1 tablespoon at a time, until the dough comes together in a solid ball.'+
+                                'If the dough is too dry, add additional water, 1 tablespoon at a time. Scrape the dough onto a lightly floured surface and gently knead into a smooth,'+
+                                'firm ball.Grease a large bowl with the remaining 2 teaspoons olive oil, add the dough, cover the bowl with plastic wrap and put it in a warm area to let'+
+                                'it double in size, about 1 hour. Turn the dough out onto a lightly floured surface and divide it into 2 equal pieces. Cover each with a clean kitchen towel'+
+                                'or plastic wrap and let them rest for 10 minutes. In a small bowl, combine tomato paste, water, Parmesan cheese, garlic, honey, anchovy paste, onion powder,'+
+                                'oregano, marjoram, basil, ground black pepper, cayenne pepper, red pepper flakes and salt; mix together, breaking up any clumps of cheese. Top with Mozzarella cheese and all other ingredients. Bake for 14 minutes.'))
+
+        returnData['directions'] = returnDirections
+    else:
+        returnDirections = []
+        for sentence in directions:
+            for tup in tupleList:
+                if tup[0] in sentence:
+                    returnDirections.append(sentence.replace(tup[0],tup[1]))
+
+
+        returnData['directions'] = returnDirections
+
+    return returnData
 
 # main function - takes entire list (ex, all of quantities.txt)
 
@@ -752,5 +987,5 @@ def getIngredients(url):
 
     return returnDict
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()
