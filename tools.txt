@@ -1,3 +1,4 @@
+aluminum foil
 apple corer
 apple cutter
 apron
@@ -5,10 +6,13 @@ baking dish
 baking pan
 baking sheet
 barbecue grill
+basket
 basket skimmers
 baster
 basting brush
+batter
 beanpot
+beater
 bench scraper
 biscuit cutter
 biscuit mold
@@ -18,30 +22,43 @@ blender
 blow torch
 blowlamp
 blowtorch
+boil
 boil over preventer
+bottle
 bottle opener
 bowl
 bread basket
 bread knife
+broiler
+broom
 browning bowl
 browning plate
 browning tray
+brush
 brushes
+bun warmer
 bundt pan
 burr grinder
 burr mill
 butcher block
 butcher knife
 butter curler
+butter dish
+cabinet
+caddy
 cake and pie server
 cake pan
 cake shovel
+cake stand
+can
 can opener
 candy thermometer
 carafe
 carving knife
+casserole
 casserole dish
 casserole pan
+cast iron pan
 charcoal grill
 cheese cloth
 cheese grater
@@ -50,15 +67,21 @@ cheese slicer
 cheesecloth
 chef's knife
 cherry pitter
+china
 chinois
 chinoise
 chip pan
+chop
+chopsticks
+cleanser
 cleaver
+coffee grinder
 coffee maker
+coffee mill
 coffee pot
 colander
 convection oven
-cookbook
+cooker
 cookie cutter
 cookie mold
 cookie mould
@@ -70,18 +93,30 @@ cooking thermometer
 cooling rack
 corer
 corkscrew
+corn pick
+counter
 crab cracker
+creamer
 crepe pan
 crock
 crock pot
+crockpot
+cup
+cupboard
 cupcake pan
 cup-cake pan
 custard cup
 cutlery
 cutting board
+decanter
 dish
+dish rack
+dish soap
+dish towel
+dishwasher
 double boiler
 doufeu
+dough
 dough scraper
 drum sieve
 dutch oven
@@ -98,21 +133,33 @@ fgarlic press
 fillet knife
 fish scaler
 fish slice
+flatware
 flour sifter
 fondue pot
+fondue set
+food
 food mill
 food processor
 fork
 forks
+freezer
+fruit bowl
 fryer
 frying pan
 frying pna
 funnel
 funner
+garbage bag
+garbage can
+garbage compactor
+garbage disposal
 garlic press
 gelatine mold
+glass
+glasses
 grapefruit knife
 grater
+gravy boat
 gravy separator
 gravy strainer
 griddle
@@ -122,25 +169,40 @@ grinder
 hamburger press
 hand mixer
 herb chopper
+honey dipper
 honey pot
+hot plate
+ice box
 ice bucket
+ice cream maker
 ice cream scoop
+ice cube tray
+ice pick
 icing spatula
 infuser
+iron skillet
+island
+jar
 jar opener
 jelly roll pan
 jellyroll pan
+jug
+juice glass
 juicer
 karahi
 kettle
+kitchen
+kitchen island
 kitchen scales
 kitchen scissors
 kitchen timer
 knife
 knife sharpener
+knives
 ladle
 lame
 lasagne pan
+leftovers
 lemon reamer
 lemon squeezer
 lid
@@ -151,11 +213,14 @@ lobster pick
 mallet
 mandolin
 mandoline
+marinate
+masher
 mated colander pot
 measuring cup
 measuring jar
 measuring jug
 measuring spoon
+measuring spoons
 meat grinder
 meat tenderiser
 meat tenderizer
@@ -172,14 +237,20 @@ mixing bowls
 molcajete
 mold
 molds
+mop
 mortar
 mortar and pestle
 mould
 muffin pan
+mug
+napkin
+nesting bowls
 nut cracker
+nut pick
 nutcracker
 nutmeg grater
 olive stoner
+opener
 oven
 oven glove
 oven mitt
@@ -187,6 +258,7 @@ oven mitts
 over glove
 pan
 pans
+paper towels
 parchment paper
 paring knife
 pastry bag
@@ -198,7 +270,9 @@ peel
 peeler
 pepper grinder
 pepper mill
+pepper shaker
 percolator
+pestle
 pie bird
 pie cutter
 pie funnel
@@ -213,6 +287,11 @@ pizza pan
 pizza shovel
 pizza slicer
 pizza stone
+pizza wheel
+placemat
+plastic bags
+plastic wrap
+plate
 plates
 platter
 poacher
@@ -223,6 +302,7 @@ pot minder
 potato masher
 potato peeler
 potato ricer
+potholder
 pots
 poultry shears
 press
@@ -232,6 +312,9 @@ rack
 racks
 raclette grill
 ramekin
+range
+reamer
+recipe
 refrigerator
 rice cooker
 ricer
@@ -246,8 +329,10 @@ salad bowl
 salad spinner
 salad wringer
 salt shaker
+sauce boat
 sauce pan
 saucepan
+saucer
 saucier
 saute pan
 sauté pan
@@ -258,27 +343,37 @@ scissors
 scoop
 scraper
 serrated knife
+serving pieces
+serving platter
 sharpening steel
 shears
 shellfish scraper
+shelves
 shredder
 sieve
 sieves
 sifter
+silverware
+sink
 skewer
+skewers
 skillet
 skimmer
 slicer
 slotted spoon
 slow cooker
+soap
 softer
 souffle dish
 soufflé dish
+soup bowl
 spatula
+spice jar
 spice rack
 spider
 splatter guard
 splayed sauté pan
+sponge
 spoon
 spoon sieves
 spoon skimmers
@@ -287,22 +382,32 @@ spring-form pan
 stariner
 steak knife
 steamer
+steel wool
+stew pot
 stockpot
 stove
 strainer
+sugar bowl
+sugar sifter
 sugar thermometer
+table
+tablecloth
 tablespoon
 tajine
 tamis
 tart pan
 tava
 tawa
+tea cup
 tea infuser
 tea kettle
 teakettle
+teapot
 teaspoon
 tenderizer
 thermometer
+timer
+tin
 tin opener
 tips
 toaster
@@ -310,20 +415,30 @@ toaster oven
 tomato knife
 tongs
 torch
+trash bags
+trash can
+tray
 trivet
 trussing needle
 tube pan
+tumbler
 tupperware
+tureen
 turner
 twine
 urokotori
-utensils
 vegetable bin
+vegetable brush
 vegetable peeler
 waffle iron
+waste basket
 water filter
+waxed paper
+weighing scale
 weighing scales
+whip
 whisk
+whisk broom
 wire wisk
 wisk
 wok
